@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brasfoot Modernizado - Flutter Web Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .flutter-app {
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .app-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .demo-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 193, 7, 0.9);
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .content-area {
+            padding: 30px;
+        }
+
+        .championship-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .championship-card {
+            background: #2d2d2d;
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #444;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .championship-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(46, 125, 50, 0.3);
+            border-color: #2e7d32;
+        }
+
+        .championship-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .serie-a { background: #ffd700; color: #000; }
+        .serie-b { background: #c0c0c0; color: #000; }
+        .serie-c { background: #cd7f32; color: #fff; }
+
+        .championship-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #2e7d32;
+        }
+
+        .simulation-area {
+            background: #2d2d2d;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid #444;
+        }
+
+        .match-simulation {
+            background: #1a1a1a;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #333;
+        }
+
+        .match-teams {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .team-info {
+            text-align: center;
+            flex: 1;
+        }
+
+        .team-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .team-city {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .score-display {
+            background: #2e7d32;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 0 20px;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .simulate-btn {
+            background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .simulate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.4);
+        }
+
+        .architecture-info {
+            background: #2d2d2d;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .arch-card {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+
+        .arch-card h4 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            background: #1a1a1a;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #444;
+            margin-top: 50px;
+        }
+
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tech-item {
+            background: #2d2d2d;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid #444;
+        }
+    </style>
+</head>
+<body>
+    <div class="flutter-app">
+        <div class="demo-badge">Flutter Web + GetX</div>
+        
+        <div class="app-header">
+            <h1>⚽ Brasfoot Modernizado</h1>
+            <p>Motor de Simulação Realista com GetX - Futebol Catarinense</p>
+        </div>
+
+        <div class="content-area">
+            <h2 style="color: #2e7d32; margin-bottom: 20px;">🏆 Campeonatos Disponíveis</h2>
+            
+            <div class="championship-grid">
+                <div class="championship-card" onclick="selectChampionship('serieA')">
+                    <span class="championship-badge serie-a">Série A</span>
+                    <h3>Campeonato Catarinense Série A</h3>
+                    <p style="color: #ccc; margin-bottom: 15px;">A elite do futebol catarinense com Avaí, Figueirense, Chapecoense e outros grandes times.</p>
+                    <div style="color: #2e7d32; font-weight: bold;">8 times participantes</div>
+                </div>
+
+                <div class="championship-card" onclick="selectChampionship('serieB')">
+                    <span class="championship-badge serie-b">Série B</span>
+                    <h3>Campeonato Catarinense Série B</h3>
+                    <p style="color: #ccc; margin-bottom: 15px;">Segunda divisão com clubes em ascensão buscando o acesso à elite estadual.</p>
+                    <div style="color: #2e7d32; font-weight: bold;">6 times participantes</div>
+                </div>
+
+                <div class="championship-card" onclick="selectChampionship('serieC')">
+                    <span class="championship-badge serie-c">Série C</span>
+                    <h3>Campeonato Catarinense Série C</h3>
+                    <p style="color: #ccc; margin-bottom: 15px;">Terceira divisão estadual com clubes em desenvolvimento.</p>
+                    <div style="color: #2e7d32; font-weight: bold;">4 times participantes</div>
+                </div>
+            </div>
+
+            <div class="simulation-area">
+                <h2 style="color: #2e7d32; margin-bottom: 20px; text-align: center;">🎮 Demonstração GetX</h2>
+                <div class="match-simulation">
+                    <div class="match-teams">
+                        <div class="team-info">
+                            <div class="team-name">Avaí</div>
+                            <div class="team-city">Florianópolis</div>
+                        </div>
+                        <div class="score-display" id="score">vs</div>
+                        <div class="team-info">
+                            <div class="team-name">Figueirense</div>
+                            <div class="team-city">Florianópolis</div>
+                        </div>
+                    </div>
+                    <div id="match-events" style="display: none; background: #333; border-radius: 8px; padding: 15px; margin-top: 15px;">
+                        <div style="font-weight: bold; margin-bottom: 10px; color: #2e7d32;">Eventos da Partida (GetX Reactive):</div>
+                    </div>
+                </div>
+                <button class="simulate-btn" onclick="simulateMatch()" id="simulateBtn">
+                    🎲 Simular Clássico com GetX
+                </button>
+            </div>
+
+            <div class="architecture-info">
+                <h3 style="color: #2e7d32; margin-bottom: 15px;">🏗️ Arquitetura GetX - Separação de Responsabilidades</h3>
+                <p style="color: #ccc; margin-bottom: 20px;">O Brasfoot Modernizado foi desenvolvido seguindo os princípios de Clean Architecture com GetX para Flutter Web.</p>
+                
+                <div class="architecture-grid">
+                    <div class="arch-card">
+                        <h4>📱 UI Layer (Reactive)</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 5px 0; color: #ccc;">✓ HomeScreen com Obx()</li>
+                            <li style="padding: 5px 0; color: #ccc;">✓ ChampionshipScreen</li>
+                            <li style="padding: 5px 0; color: #ccc;">✓ SimulationScreen</li>
+                            <li style="padding: 5px 0; color: #ccc;">✓ Navegação Get.to()</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="arch-card">
+                        <h4>🎮 Controllers (GetX)</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 5px 0; color: #ccc;">✓ GameController</li>
+                            <li style="padding: 5px 0; color: #ccc;">✓ Estado reativo (Rx)</li>
+                            <li style="padding: 5px 0; color: #ccc;">✓ Lógica de negócio</li>
+                            <li style="padding: 5px 0; color: #ccc;">✓ Injeção de dependência</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="arch-card">
+                        <h4>⚙️ Core Engine</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 5px 0; color: #ccc;">✓ SimulationEngine</li>
+                            <li style="padding: 5px 0; color: #ccc;">✓ Algoritmos realistas</li>
+                            <li style="padding: 5px 0; color: #ccc;">✓ Cálculos probabilísticos</li>
+                            <li style="padding: 5px 0; color: #ccc;">✓ Lógica isolada da UI</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="arch-card">
+                        <h4>📊 Models & Data</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 5px 0; color: #ccc;">✓ Team, Championship, Match</li>
+                            <li style="padding: 5px 0; color: #ccc;">✓ JSON parsing</li>
+                            <li style="padding: 5px 0; color: #ccc;">✓ Dados realistas SC</li>
+                            <li style="padding: 5px 0; color: #ccc;">✓ Serialização</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h3 style="color: #2e7d32; margin-bottom: 15px;">🚀 Tecnologias Utilizadas</h3>
+            <p style="color: #999; margin-bottom: 10px;">Aplicação Flutter Web com arquitetura moderna e motor de simulação realista</p>
+            
+            <div class="tech-stack">
+                <div class="tech-item">Flutter Web</div>
+                <div class="tech-item">GetX State Management</div>
+                <div class="tech-item">Dart Language</div>
+                <div class="tech-item">Reactive Programming</div>
+                <div class="tech-item">Clean Architecture</div>
+                <div class="tech-item">Material Design</div>
+            </div>
+            
+            <p style="margin-top: 20px; color: #999;"><em>"Do Contestado ao Litoral, o futebol catarinense em suas mãos!"</em></p>
+        </div>
+    </div>
+
+    <script>
+        function selectChampionship(serie) {
+            const messages = {
+                serieA: 'Série A selecionada!\n\n✅ 8 times da elite catarinense\n✅ Avaí, Figueirense, Chapecoense...\n✅ Motor GetX com simulação realista\n✅ Tabela reativa em tempo real',
+                serieB: 'Série B selecionada!\n\n✅ 6 times em ascensão\n✅ Concórdia, Próspera, Camboriú...\n✅ Busca pelo acesso à elite\n✅ Simulação com GetX',
+                serieC: 'Série C selecionada!\n\n✅ 4 times em desenvolvimento\n✅ Atlético Tubarão, Lagunense...\n✅ Grandes sonhos de crescimento\n✅ Arquitetura GetX completa'
+            };
+            
+            alert('🏆 ' + messages[serie] + '\n\nEm uma aplicação Flutter real, você seria direcionado para a tela de gestão do campeonato com navegação GetX!');
+        }
+
+        function simulateMatch() {
+            const btn = document.getElementById('simulateBtn');
+            const scoreEl = document.getElementById('score');
+            const eventsEl = document.getElementById('match-events');
+            
+            btn.disabled = true;
+            btn.textContent = '⚽ Simulando com GetX...';
+            btn.style.animation = 'pulse 1s infinite';
+            
+            setTimeout(() => {
+                // Simula resultado
+                const homeGoals = Math.floor(Math.random() * 4);
+                const awayGoals = Math.floor(Math.random() * 4);
+                
+                // Atualiza UI
+                scoreEl.textContent = homeGoals + ' x ' + awayGoals;
+                scoreEl.style.background = homeGoals > awayGoals ? '#2e7d32' : 
+                                         awayGoals > homeGoals ? '#d32f2f' : '#ff9800';
+                
+                // Mostra eventos
+                eventsEl.style.display = 'block';
+                eventsEl.innerHTML = '<div style="font-weight: bold; margin-bottom: 10px; color: #2e7d32;">Eventos da Partida (GetX Reactive):</div>' +
+                    '<div style="margin: 5px 0; padding: 5px; background: rgba(46, 125, 50, 0.1); border-radius: 4px;">⚽ Gol simulado com motor GetX!</div>';
+                
+                btn.disabled = false;
+                btn.textContent = '🔄 Simular Novamente (GetX)';
+                btn.style.animation = 'none';
+                
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
